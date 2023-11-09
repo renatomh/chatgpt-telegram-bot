@@ -1,5 +1,5 @@
 boto3==1.26.78
-openai==0.27.2
+openai==1.2.0
 pyTelegramBotAPI==4.10.0
 python-dotenv==0.21.1
 python-telegram-bot==20.1

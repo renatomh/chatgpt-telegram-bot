@@ -86,6 +86,7 @@ For that, there are some extra steps to be done, such as:
 * [Building a Scalable Telegram Chatbot with Python and Serverless Function.](https://awstip.com/building-a-scalable-telegram-chatbot-with-python-and-serverless-function-eed20902ac1f)
 * [telegram.ext package](https://python-telegram-bot.readthedocs.io/en/stable/telegram.ext.html)
 * [Add External Python Libraries to AWS Lambda using Lambda Layers](https://www.linkedin.com/pulse/add-external-python-libraries-aws-lambda-using-layers-gabe-olokun/)
+- [pyTelegramBotAPI](https://github.com/eternnoir/pyTelegramBotAPI)
 
 ## 📄 License
 
