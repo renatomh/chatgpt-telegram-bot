@@ -12,10 +12,13 @@ This project was developed to provide a personal Telegram Chatbot that allows co
 
 * Ask ChatGPT specific questions;
 * Have context based conversations with ChatGPT;
+
 <p align="center">
     <img src=".github/sample.gif" alt="sample" width="320" />&emsp;
 </p>
+
 * Generate images from prompts with DALL-E 3;
+
 <p align="center">
     <img src=".github/sample-image-gen.gif" alt="sample image generation" width="320" />&emsp;
 </p>
