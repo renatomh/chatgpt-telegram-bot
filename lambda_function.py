@@ -15,7 +15,7 @@ bot = telebot.TeleBot(os.environ["BOT_TOKEN"])
 
 # Setting the API Key and model engine for OpenAI
 openai.api_key = os.environ["OPENAI_API_KEY"]
-model_engine = "gpt-3.5-turbo"
+model_engine = "gpt-3.5-turbo-1106"
 
 
 # This function checks if the message was sent by the admin
@@ -105,7 +105,52 @@ def clear_messages(message):
 def request_image(message):
     # Checking if it's an admin message
     if is_admin_message(message):
-        bot.send_message(message["chat"]["id"], "This feature is not available yet.")
+        # Getting the text from the message
+        text = message["text"].strip()
+        # If no content was provided
+        if text == "/image":
+            bot.send_message(
+                message["chat"]["id"],
+                "Please provide a prompt for the image generation.",
+            )
+        # If a prompt was provided
+        else:
+            # We'll extract the prompt from the message text
+            prompt = text.replace("/image", "")
+
+            # If the content is too short
+            if len(prompt) < 10:
+                bot.send_message(
+                    message["chat"]["id"], "Prompt is too short (min length: 10 chars)."
+                )
+
+            # If everything is ok, we'll try to generate the image and return to the user
+            else:
+                try:
+                    # Requesting the image generation
+                    response = openai.images.generate(
+                        model="dall-e-3",
+                        prompt=prompt,
+                        size="1024x1024",
+                        quality="standard",
+                        n=1,
+                    )
+                    # Getting the image URL
+                    image_url = response.data[0].url
+                    # Getting the revised prompt to be sent as a caption
+                    caption = response.data[0].revised_prompt
+                    # Send the generated image back to the user
+                    bot.send_photo(
+                        message["chat"]["id"],
+                        photo=image_url,
+                        caption=caption,
+                    )
+                # If something goes wrong, we'll inform about the error
+                except Exception as e:
+                    bot.send_message(
+                        message["chat"]["id"],
+                        f"Error trying to generate the image: {e}",
+                    )
 
 
 # Main function
@@ -128,13 +173,14 @@ def lambda_handler(event, context):
         logger.info(text)
 
         # If user is sending an available command
-        if text in ["/start", "/clear", "/image"]:
-            if text == "/start":
-                send_welcome(message)
-            elif text == "/clear":
-                clear_messages(message)
-            elif text == "/image":
-                request_image(message)
+        if text == "/start":
+            send_welcome(message)
+            return
+        elif text == "/clear":
+            clear_messages(message)
+            return
+        elif text.startswith("/image"):
+            request_image(message)
             return
 
         # Otherwise, we'll save the message to the DynamoDB table
@@ -145,7 +191,7 @@ def lambda_handler(event, context):
         # First, we get the messages list
         messages = get_dynamodb_messages()
         # Making an API request to the OpenAI API
-        res = openai.ChatCompletion.create(
+        res = openai.chat.completions.create(
             model=model_engine,
             messages=messages,
         )
