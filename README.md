@@ -23,6 +23,12 @@ This project was developed to provide a personal Telegram Chatbot that allows co
     <img src=".github/sample-image-gen.gif" alt="sample image generation" width="320" />&emsp;
 </p>
 
+* Provide images for chat contexts;
+
+<p align="center">
+    <img src=".github/sample-image-chat.gif" alt="sample image chat" />&emsp;
+</p>
+
 ## 🛠 Technologies
 
 During the development of this project, the following techologies were used:
